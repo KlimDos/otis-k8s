@@ -21,6 +21,10 @@ spec:
         cpu: "500m"
     ports:
       - containerPort: 8000
+    readinessProbe:
+        httpGet:
+          path: /index.html
+          port: 80
   initContainers:
   - name: init-ntest-index
     image: busybox
