@@ -1,0 +1,9 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  extraMounts:
+  - hostPath: /Users/sasha/Desktop/kind-kube
+    containerPath: /tmp/kind-kube
+- role: worker
+- role: worker

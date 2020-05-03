@@ -1,0 +1,12 @@
+apiVersion: v1
+contexts:
+- context:
+    cluster: kind
+    user: bob
+  name: kind-bob-cluster-admin
+kind: Config
+users:
+- name: bob
+  user:
+    client_key_data: admin
+    token: password

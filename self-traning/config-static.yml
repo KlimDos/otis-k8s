@@ -1,0 +1,12 @@
+apiVersion: v1
+contexts:
+- context:
+    cluster: minikube
+    user: static-admin
+  name: minikube-static
+kind: Config
+users:
+- name: static-admin
+  user:
+    username: admin
+    password: password
