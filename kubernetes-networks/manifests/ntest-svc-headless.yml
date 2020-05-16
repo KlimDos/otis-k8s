@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ntest-svc-headless
+spec:
+  selector:
+    name: myapp-ntest
+  type:  ClusterIP
+  clusterIP: None
+  ports:
+  - name:  ui
+    port:  80
+    targetPort:  8000

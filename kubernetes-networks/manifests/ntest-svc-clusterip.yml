@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ntest-svc-clusterip
+spec:
+  selector:
+    app: myapp-ntest
+  type:  ClusterIP
+  ports:
+  - name:  ui
+    port:  80
+    targetPort:  8000

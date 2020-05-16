@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  ct-dummy-lb
+spec:
+  selector:
+    app: ct-dummy
+  type:  LoadBalancer
+  ports:
+  - name:  ui
+    port:  80
+    targetPort:  8000
