@@ -1,0 +1,5 @@
+- follow the guide:
+- apply namespace
+- apply multiple-kinds
+- `kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"`
+- apply config map

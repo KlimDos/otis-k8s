@@ -1,0 +1,57 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elasticsearch
+spec:
+  selector:
+    matchLabels:
+      app: elasticsearch
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      containers:
+      - name: elasticsearch
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
+        env:
+          - name: discovery.type
+            value: single-node
+        resources:
+          limits:
+            memory: 4Gi
+            cpu: 500m
+        ports:
+        - containerPort: 9200
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+spec:
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+      - name: kibana
+        image: docker.elastic.co/kibana/kibana:6.5.4
+        env:
+          - name: ELASTICSEARCH_URL
+            value: http://172.19.255.2:9200
+          - name: XPACK_SECURITY_ENABLED
+            value: "true"
+        resources:
+          limits:
+            memory: 1Gi
+            cpu: 500m
+        ports:
+        - containerPort: 5601

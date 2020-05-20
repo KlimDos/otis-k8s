@@ -1,0 +1,14 @@
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name:  dashboard-svc
+spec:
+  selector:
+    k8s-app: kubernetes-dashboard
+  type:  LoadBalancer
+  ports:
+  - name:  ui
+    port:  443
+    targetPort:  443

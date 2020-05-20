@@ -17,20 +17,17 @@ spec:
       volumes:
         - name: log-pvc
           persistentVolumeClaim:
-            claimName: ct-dummy-pvc
+            claimName: data-minio-0
       containers:
       - name: ct-dummy
         image: klimdos/python-flask-dummy:logs
-        readinessProbe:
-            httpGet:
-              path: /version
-              port: 8000
         env:
           - name: PORT
             value: "8000"
         resources:
           limits:
             memory: "128Mi"
+            cpu: "500m"
         ports:
         - containerPort: 8000
         volumeMounts:

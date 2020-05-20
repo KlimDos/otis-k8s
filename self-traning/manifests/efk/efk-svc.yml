@@ -1,0 +1,29 @@
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name:  elasticsearch-svc
+spec:
+  selector:
+    app: elasticsearch
+  type:  LoadBalancer
+  ports:
+  - name:  ui
+    port:  9200
+    targetPort:  9200
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name:  kibana-svc
+spec:
+  selector:
+    app: kibana
+  type:  LoadBalancer
+  ports:
+  - name:  ui
+    port:  5601
+    targetPort:  5601

@@ -1,0 +1,36 @@
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name:  busybox-ns
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox-app
+  namespace: busybox-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: busybox-app
+  template:
+    metadata:
+      labels:
+        app: busybox-app
+        terraform: "false"
+    spec:
+      containers:
+      - name: busybox-app
+        image: busybox
+        command: ['sh', '-c', 'df']
+        env:
+          - name: PORT
+            value: "8000"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
