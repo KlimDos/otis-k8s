@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: elasticsearch
+  namespace: efk-dev
 spec:
   selector:
     matchLabels:
@@ -32,6 +33,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kibana
+  namespace: efk-dev
 spec:
   selector:
     matchLabels:
@@ -46,7 +48,7 @@ spec:
         image: docker.elastic.co/kibana/kibana:6.5.4
         env:
           - name: ELASTICSEARCH_URL
-            value: http://172.19.255.2:9200
+            value: http://100.70.61.79:9200
           - name: XPACK_SECURITY_ENABLED
             value: "true"
         resources:

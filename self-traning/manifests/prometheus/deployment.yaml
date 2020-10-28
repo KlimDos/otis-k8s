@@ -1,0 +1,82 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-blackbox
+  namespace: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus-blackbox
+  template:
+    metadata:
+      labels:
+        app: prometheus-blackbox
+        terraform: "false"
+    spec:
+      volumes:
+        - name: config-volume
+          configMap:
+            name: prometheus-blackbox
+      containers:
+      - name: prometheus-blackbox
+        image: prom/blackbox-exporter:master
+        args:
+          - '--config.file=/config/blackbox.yml'
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
+        ports:
+        - containerPort: 9115
+        volumeMounts:
+        - name: config-volume
+          readOnly: true
+          mountPath: /config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-server
+  namespace: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus-server
+  template:
+    metadata:
+      labels:
+        app: prometheus-server
+        terraform: "false"
+    spec:
+      volumes:
+        - name: data-pvc
+          persistentVolumeClaim:
+            claimName: prometheus-data
+        - name: config-volume
+          configMap:
+            name: prometheus-server
+      containers:
+      - name: prometheus-server
+        image: prom/prometheus
+        args:
+          - '--storage.tsdb.retention.time=15d'
+          - '--config.file=/etc/config/prometheus.yml'
+          - '--storage.tsdb.path=/data'
+          - '--web.console.libraries=/etc/prometheus/console_libraries'
+          - '--web.console.templates=/etc/prometheus/consoles'
+          - '--web.enable-lifecycle'
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
+        ports:
+        - containerPort: 9090
+        volumeMounts:
+        - name: data-pvc
+          mountPath: /data
+        - name: config-volume
+          readOnly: true
+          mountPath: /etc/config

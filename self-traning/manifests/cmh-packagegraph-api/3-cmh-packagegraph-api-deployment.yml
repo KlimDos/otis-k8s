@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cmh-packagegraph-api
+  namespace: cmh-dev
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cmh-packagegraph-api
+  template:
+    metadata:
+      labels:
+        app: cmh-packagegraph-api
+        terraform: "false"
+    spec:
+      volumes:
+        - name: cmh-packagegraph-api-volume-dev
+          persistentVolumeClaim:
+            claimName: cmh-packagegraph-api-pvc-dev
+      containers:
+      - name: cmh-packagegraph-api
+        #image: artifactory.aws.wiley.com/docker/cmh/cmh-packagegraph-api:1.0-0-g4e1a96b
+        image: klimdos/packagegraph-api:latest
+        imagePullPolicy: Always
+        # env:
+        #   - name: PORT
+        #     value: "8000"
+        resources:
+          limits:
+            memory: 2G
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: /opt/logs
+          name: cmh-packagegraph-api-volume-dev

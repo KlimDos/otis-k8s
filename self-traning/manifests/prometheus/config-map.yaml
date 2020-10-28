@@ -1,0 +1,61 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  labels:
+    app: prometheus-blackbox
+  name: prometheus-blackbox
+  namespace: prometheus
+data:
+  blackbox.yml: |
+    modules:
+      http_2xx:
+        prober: http
+        http:
+      http_post_2xx:
+        prober: http
+        http:
+          method: POST
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  labels:
+    app: prometheus-server
+  name: prometheus-server
+  namespace: prometheus
+data:
+  prometheus.yml: |
+    global:
+      evaluation_interval: 1m
+      scrape_interval: 15s
+      scrape_timeout: 15s
+    scrape_configs:
+    - job_name: prometheus
+      static_configs:
+      - targets:
+        - localhost:9090
+    - job_name: dummy
+      static_configs:
+      - targets: 
+        - 172.19.255.1:80
+    - job_name: blackbox
+      metrics_path: /probe
+      params:
+        module: [http_2xx]
+      static_configs:
+        - targets:
+          - https://www.robustperception.io/
+          - http://prometheus.io/blog
+          - http://ya.ru/
+          - http://172.19.255.1/health
+          - https://google.com            
+          - https://www.telegraph.co.uk
+          
+      relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: instance
+        - target_label: __address__
+          replacement: 172.19.255.7:9115 # Blackbox exporter.

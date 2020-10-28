@@ -1,0 +1,28 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name:  prometheus-blackbox-svc
+  namespace: prometheus
+spec:
+  selector:
+    app: prometheus-blackbox
+  type:  LoadBalancer
+  ports:
+  - name:  prometheus-blackbox-port
+    port:  9115
+    targetPort:  9115
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name:  prometheus-server-svc
+  namespace: prometheus
+spec:
+  selector:
+    app: prometheus-server
+  type:  LoadBalancer
+  ports:
+  - name:  prometheus-server-port
+    port:  9090
+    targetPort:  9090

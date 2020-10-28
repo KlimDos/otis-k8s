@@ -4,6 +4,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name:  elasticsearch-svc
+  namespace: efk-dev
 spec:
   selector:
     app: elasticsearch
@@ -19,11 +20,12 @@ kind: Service
 apiVersion: v1
 metadata:
   name:  kibana-svc
+  namespace: efk-dev
 spec:
   selector:
     app: kibana
   type:  LoadBalancer
   ports:
   - name:  ui
-    port:  5601
+    port:  80
     targetPort:  5601

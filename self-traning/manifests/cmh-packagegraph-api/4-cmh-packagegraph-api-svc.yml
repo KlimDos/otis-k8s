@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  cmh-packagegraph-api-lb
+spec:
+  selector:
+    app: cmh-packagegraph-api
+  type:  LoadBalancer
+  ports:
+  - name:  ui
+    port:  80
+    targetPort:  8080
