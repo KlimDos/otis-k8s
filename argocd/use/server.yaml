@@ -1,0 +1,21 @@
+# apiVersion: argoproj.io/v1alpha1
+# kind: ArgoCD
+# metadata:
+#   name: argocd-main-server
+#   namespace: argocd
+#   labels:
+#     example: basic
+# spec: {}
+
+apiVersion: argoproj.io/v1alpha1
+kind: ArgoCD
+metadata:
+  name: argocd-m
+  namespace: argocd
+  labels:
+    example: ingress
+spec:
+  server:
+    ingress:
+      enabled: true
+    insecure: true

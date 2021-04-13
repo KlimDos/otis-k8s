@@ -2,19 +2,19 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: fluent-bit
-  namespace: efk-dev
+  namespace: efk
   labels:
-    k8s-app: fluent-bit-logging
+    app: fluent-bit
     version: v1
 spec:
   selector:
     matchLabels:
-      k8s-app: fluent-bit-logging
+      app: fluent-bit
       version: v1
   template:
     metadata:
       labels:
-        k8s-app: fluent-bit-logging
+        app: fluent-bit
         version: v1
       annotations:
         prometheus.io/scrape: "true"
@@ -29,9 +29,9 @@ spec:
           - containerPort: 2020
         env:
         - name: FLUENT_ELASTICSEARCH_HOST
-          value: "6f6c78f424db.ngrok.io"
+          value: "elasticsearch-svc"
         - name: FLUENT_ELASTICSEARCH_PORT
-          value: "80"
+          value: "9200"
         volumeMounts:
         - name: varlog
           mountPath: /var/log

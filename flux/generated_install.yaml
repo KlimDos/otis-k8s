@@ -1,42 +1,4 @@
 ---
-# The service account, cluster roles, and cluster role binding are
-# only needed for Kubernetes with role-based access control (RBAC).
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    name: flux
-  name: flux
-  namespace: flux
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRole
-metadata:
-  labels:
-    name: flux
-  name: flux
-rules:
-  - apiGroups: ['*']
-    resources: ['*']
-    verbs: ['*']
-  - nonResourceURLs: ['*']
-    verbs: ['*']
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
-metadata:
-  labels:
-    name: flux
-  name: flux
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: flux
-subjects:
-  - kind: ServiceAccount
-    name: flux
-    namespace: flux
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -180,16 +142,17 @@ spec:
         # Replace the following URL to change the Git repository used by Flux.
         # HTTP basic auth credentials can be supplied using environment variables:
         # https://$(GIT_AUTHUSER):$(GIT_AUTHKEY)@github.com/user/repository.git
-        - --git-url=git@github.com:/flux-get-started
+        - --git-url=git@github.com:Ridman/cloudd-do.git
         - --git-branch=master
-        - --git-path=namespaces,workloads
+        - --git-path=kubernetes/staging
         - --git-label=flux
-        - --git-email=@users.noreply.github.com
+        - --git-user=FluxCD
+        - --git-email=FluxCD@users.noreply.github.com
 
         # Include these two to enable git commit signing
         # - --git-gpg-key-import=/root/gpg-import
         # - --git-signing-key=<key id>
-
+        
         # Include this to enable git signature verification
         # - --git-verify-signatures
 
@@ -272,4 +235,42 @@ spec:
     - name: memcached
       port: 11211
   selector:
-      name: memcached
+    name: memcached
+---
+# The service account, cluster roles, and cluster role binding are
+# only needed for Kubernetes with role-based access control (RBAC).
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    name: flux
+  name: flux
+  namespace: flux
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  labels:
+    name: flux
+  name: flux
+rules:
+  - apiGroups: ['*']
+    resources: ['*']
+    verbs: ['*']
+  - nonResourceURLs: ['*']
+    verbs: ['*']
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    name: flux
+  name: flux
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flux
+subjects:
+  - kind: ServiceAccount
+    name: flux
+    namespace: flux

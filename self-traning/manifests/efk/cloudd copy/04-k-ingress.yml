@@ -1,0 +1,17 @@
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tmp-kibana-ingress
+  namespace: efk
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: kibana.cloudd-dev.tk
+      http:
+        paths:
+          - backend:
+              serviceName: kibana-svc
+              servicePort: 5601
+          #path: /
